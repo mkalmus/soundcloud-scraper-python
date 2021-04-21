@@ -2,7 +2,7 @@
 
 # To-do:
 
-[ ] Cache less HTML data (no styling or scripts) \n
+[ ] Cache less HTML data (no styling or scripts) \n /n
 [ ] Optimize Selenium scraping process flow \n 
     [ ] Use headless webdriver \n
     [ ] Find better sleep time \n 
