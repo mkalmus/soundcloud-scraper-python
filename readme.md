@@ -2,8 +2,10 @@
 
 # To-do:
 
-[ ] Cache less HTML data (no styling or scripts) \n /n
-[ ] Optimize Selenium scraping process flow \n 
-    [ ] Use headless webdriver \n
-    [ ] Find better sleep time \n 
-    [ ] Incorporate waiting for elements
+<ul>
+    <li> [ ] Cache less HTML data (no styling or scripts) </li>
+    <li> [ ] Optimize Selenium scraping process flow </li>
+    <li> [ ] Use headless webdriver </li>
+    <li> [ ] Find better sleep time </li>
+    <li> [ ] Incorporate waiting for elements </li>
+</ul>
