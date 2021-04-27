@@ -83,16 +83,18 @@ def make_plotly_bar(xvals, yvals):
     fig = go.Figure(data=bar_data, layout=basic_layout)
     fig.show()
 
-print("""Welcome to the Soundcloud scraper. This program allows the user to 
-see information about popular genres, tracks, and artists on Soundcloud.
-All data is based off of the top 10 tracks for every genre. First, you
-will be presented with the top genres this week by track plays. Then,
-you can perform interactions where visualizations will be shown in your browser.""")
-print('-'*50)
+print("")
+print('-'*150)
+print("""Welcome to the Soundcloud scraper. This program allows the user to see information about popular genres, tracks, and artists on Soundcloud.
+All data is based off of the top 10 tracks for every genre. First, you will be presented with the top genres this week by track plays. 
+Then, you can perform interactions where visualizations will be shown in your browser.""")
+print('-'*150)
+print("")
 
 while True:
     print('If you would like to begin, enter 1; otherwise, type exit to exit the program (note: new graphs will open in new tabs)')
     choice_cont = input('Your choice: ')
+    print("")
 
     if choice_cont == 'exit':
         sys.exit()
@@ -105,6 +107,7 @@ while True:
         while True:
             print(f"This graph is sorted by weekly views. Would you like to sort by all time views instead? If yes, type yes; if no, type no. Or, type exit to exit.")
             weekly_or_all = input('Your choice: ')
+            print("")
 
             if (weekly_or_all.lower() not in ['yes', 'no', 'exit']):
                 print('Please enter a valid input (yes, no, or exit) and try again.')
@@ -146,7 +149,7 @@ while True:
 
             if graph_type == 'exit':
                 sys.exit()
-            
+
             if graph_type not in ['1', 'exit']:
                 print('Please enter a valid input (1 or exit) and try again.')
                 print("")
