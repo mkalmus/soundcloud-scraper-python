@@ -31,20 +31,23 @@ def make_genre_top_tracks(genre_selection):
     tracks_filtered = track_df[track_df['genre'] == genre_selection].sort_values(
         'weekly_views', ascending=False).head(3)
 
+    graph_title = f'Top 3 Tracks for {genre_selection} (hover to see artist)'
     fig = px.bar(tracks_filtered, x="title", y="weekly_views", log_x=False,
-                     hover_name="artist", hover_data=["title", "artist", "weekly_views"])
+                     hover_name="artist", hover_data=["title", "artist", "weekly_views"],
+                     title=graph_title)
 
     fig.show()
 
     return tracks_filtered
 
-def make_top_3_radar(filtered_track_df):
+def make_top_3_radar(filtered_track_df, graph_title):
     categories = ['number of tracks','followers','top track views']
     artist_filtered = artist_df[artist_df['artist_name'].isin(tracks_filtered['artist'])]
     x = artist_filtered[['artist_numtracks', 'artist_followers', 'artist_toptrack_views']]
     y = artist_filtered[['artist_name']]
 
-    fig = go.Figure()
+    basic_layout = go.Layout(title=graph_title)
+    fig = go.Figure(layout=basic_layout)
 
     fig.add_trace(go.Scatterpolar(
           r=list(x.iloc[0].values),
@@ -58,8 +61,6 @@ def make_top_3_radar(filtered_track_df):
           fill='toself',
           name=str(y.iloc[1].values)
     ))
-
-
     fig.add_trace(go.Scatterpolar(
           r=list(x.iloc[2].values),
           theta=categories,
@@ -77,9 +78,9 @@ def make_top_3_radar(filtered_track_df):
 
     fig.show()
 
-def make_plotly_bar(xvals, yvals):
+def make_plotly_bar(xvals, yvals, graph_title):
     bar_data = go.Bar(x=xvals, y=yvals)
-    basic_layout = go.Layout(title="Bar Graph")
+    basic_layout = go.Layout(title=graph_title)
     fig = go.Figure(data=bar_data, layout=basic_layout)
     fig.show()
 
@@ -100,7 +101,7 @@ while True:
         sys.exit()
 
     if choice_cont == '1':
-        make_plotly_bar(genres_names_week, genres_values_week)
+        make_plotly_bar(genres_names_week, genres_values_week, 'Total Genre Streams per Week')
         plot_names = genres_names_week
         plot_values = genres_values_week
 
@@ -120,7 +121,7 @@ while True:
             sys.exit()
 
         if weekly_or_all.lower() == 'yes':
-            make_plotly_bar(genres_names_all, genres_values_all)
+            make_plotly_bar(genres_names_all, genres_values_all, 'Total Genre Streams for all Time')
             plot_names = genres_names_all
             plot_values = genres_values_all
 
@@ -147,6 +148,7 @@ while True:
 
         while True:
             print("Now you can look into the artists of these songs (to see the artist, hover over any bar).") 
+            print("")
             print("Type 1 if you'd like to see artist information as a radar chart, or type exit to exit.")
             graph_type = input('Your choice: ')
             print("")
@@ -161,7 +163,8 @@ while True:
                 break
 
         if graph_type == '1':
-            make_top_3_radar(tracks_filtered)
+            graph_title = f'Radar Plot for {plot2_name} Artists'
+            make_top_3_radar(tracks_filtered, graph_title)
 
         print('Thanks for using the Soundcloud scraper. Please consider contributing to the code on GitHub!')
         sys.exit()
