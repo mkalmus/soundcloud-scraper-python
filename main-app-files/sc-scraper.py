@@ -127,6 +127,7 @@ while True:
         while True:
             print(f"Now you can look into a specific genre. To see top tracks for your desigred genre, type a selection from 1-10 corresponding to the graph in your browser and the genre you want to see. Or, type exit to exit.")
             genre_input = input('Your choice: ')
+            print("")
 
             if genre_input == 'exit':
                 sys.exit()
@@ -140,12 +141,15 @@ while True:
 
         plot2_name = plot_names[int(genre_input)-1]
         print(f"The genre you selected was {plot2_name}.")
+        print("")
         tracks_filtered = make_genre_top_tracks(plot2_name)
 
 
         while True:
-            print("Now you can look into the artists of these songs (to see the artist, hover over any bar). Type 1 if you'd like to see artist information as a radar chart, or type exit to exit.")
+            print("Now you can look into the artists of these songs (to see the artist, hover over any bar).") 
+            print("Type 1 if you'd like to see artist information as a radar chart, or type exit to exit.")
             graph_type = input('Your choice: ')
+            print("")
 
             if graph_type == 'exit':
                 sys.exit()
