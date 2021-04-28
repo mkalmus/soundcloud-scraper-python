@@ -10,6 +10,9 @@
 
 ## Fetching New Data, Updating Database and Running App 
 ## WARNING: Running this can take over 30 minutes (optimization in to-do) and creates new files
+
+
+1. Install a Chromedriver (https://chromedriver.chromium.org/downloads, https://chromedriver.storage.googleapis.com/index.html?path=90.0.4430.24/) then change lines 64 and 184 of `final-project-scraping-dbstoring.py` to the path of  your chromedriver
 1. Install libraries listed in step 1 above (`plotly` and `pandas`)
 2. Ensure library dependencies are installed: `selenium`, `beautifulsoup4`, `numpy`. You can use pip to install as outlined above.
 3. Delete `sc_cache.json` and `soundcloud_data.db` if they exist. 
