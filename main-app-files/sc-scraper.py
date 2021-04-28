@@ -152,13 +152,13 @@ Alternatively, type back to go back or exit to exit.""")
             step_one()
 
         if weekly_or_all.lower() == '1':
-            make_plotly_bar(genres_names_all, genres_values_all, 'Total Genre Streams for all Time')
+            make_plotly_bar(genre_labels_all, genres_values_all, 'Total Genre Streams for all Time')
             plot_names = genres_names_all
             plot_values = genres_values_all
             step_three()
 
         if weekly_or_all.lower() == '0':
-            make_plotly_bar(genres_names_week, genres_values_week, 'Total Genre Streams per Week')
+            make_plotly_bar(genre_labels_week, genres_values_week, 'Total Genre Streams per Week')
             plot_names = genres_names_week
             plot_values = genres_values_week
             step_three()
@@ -220,6 +220,18 @@ to go back or exit to exit.""")
             print('Thanks for using the Soundcloud scraper. Please consider contributing to the code on GitHub!')
             print("")
             sys.exit()
+
+def make_labels(names):
+    labels = []
+    for i, item in enumerate(names):
+        item = f"[{str(i+1)}] {item}"
+        labels.append(item)
+    
+    return labels
+
+genre_labels_week = make_labels(genres_names_week)
+genre_labels_all = make_labels(genres_names_all)
+
 
 def main():
     intro()
