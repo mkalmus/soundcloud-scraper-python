@@ -1,5 +1,8 @@
 # Soundcloud Scraper (v1)
 
+# Description
+This application allows users to work with scraped Soundcloud data and create plots in their browser through interactive print statements and plotly. Users can also fetch, cache, and store new data themselves. These two processes are isolated as fetching and caching the data takes 30+ minutes. 
+
 # READ THIS: Instructions for Running
 
 ## Dependencies
