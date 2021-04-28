@@ -97,98 +97,138 @@ def make_plotly_bar(xvals, yvals, graph_title):
     fig = go.Figure(data=bar_data, layout=basic_layout)
     fig.show()
 
-print("")
-print('-'*150)
-print("""Welcome to the Soundcloud scraper. This program allows the user to see information about popular genres, tracks, and artists on Soundcloud.
-All data is based off of the top 10 tracks for every genre. First, you will be presented with the top genres this week by track plays. 
-Then, you can perform interactions where visualizations will be shown in your browser.""")
-print('-'*150)
-print("")
-
-while True:
-    print('If you would like to begin, enter 1; otherwise, type exit to exit the program (note: new graphs will open in new tabs)')
-    choice_cont = input('Your choice: ')
+def intro():
+    print("")
+    print('-'*125)
+    print("""Welcome to the Soundcloud scraper. This program allows the user to see information about popular genres, tracks, 
+and artists on Soundcloud. All data is based off of the top 10 tracks for every genre. and, you can perform interactions where visualizations 
+will be shown in your browser.""")
+    print('-'*125)
     print("")
 
-    if choice_cont == 'exit':
-        sys.exit()
+def step_one():
+    global plot_names
+    global plot_values
+    print('-'*125)
+    print('Step 1: Begin')
+    print('-'*125)
+    while True:
+        print('If you would like to begin, enter 1; otherwise, type exit to exit the program (note: new graphs will open in new tabs)')
+        choice_cont = input('Your choice: ')
+        print("")
 
-    if choice_cont == '1':
-        make_plotly_bar(genres_names_week, genres_values_week, 'Total Genre Streams per Week')
-        plot_names = genres_names_week
-        plot_values = genres_values_week
+        if choice_cont == 'exit':
+            sys.exit()
 
-        while True:
-            print(f"This graph is sorted by weekly views. Would you like to sort by all time views instead? If yes, type yes; if no, type no. Or, type exit to exit.")
-            weekly_or_all = input('Your choice: ')
+        if choice_cont == '1':
+            step_two()
+
+        else:
+            print('Please enter a valid input (1 or exit) and try again.')
             print("")
+            continue
 
-            if (weekly_or_all.lower() not in ['yes', 'no', 'exit']):
-                print('Please enter a valid input (yes, no, or exit) and try again.')
-                print("")
+def step_two():
+    global plot_names
+    global plot_values
+    global weekly_or_all
+    print('-'*125)
+    print('Step 2: Choosing Views per Week or All Time Views')
+    print('-'*125)
+    while True:
+        print(f"""For the next two graphs, would you like to sort by all time views or weekly views? If all time, type 1; if weekly, type 0.
+Alternatively, type back to go back or exit to exit.""")
+        weekly_or_all = input('Your choice: ')
+        print("")
 
-            else:
-                break
+        if (weekly_or_all.lower() not in ['1', '0', 'exit', 'back']):
+            print('Please enter a valid input (yes, no, exit, or back) and try again.')
+            print("")
 
         if weekly_or_all.lower() == 'exit':
             sys.exit()
 
-        if weekly_or_all.lower() == 'yes':
+        if weekly_or_all.lower() == 'back':
+            step_one()
+
+        if weekly_or_all.lower() == '1':
             make_plotly_bar(genres_names_all, genres_values_all, 'Total Genre Streams for all Time')
             plot_names = genres_names_all
             plot_values = genres_values_all
+            step_three()
 
-        while True:
-            print(f"Now you can look into a specific genre. To see top tracks for your desigred genre, type a selection from 1-10 corresponding to the graph in your browser and the genre you want to see. Or, type exit to exit.")
-            genre_input = input('Your choice: ')
-            print("")
+        if weekly_or_all.lower() == '0':
+            make_plotly_bar(genres_names_week, genres_values_week, 'Total Genre Streams per Week')
+            plot_names = genres_names_week
+            plot_values = genres_values_week
+            step_three()
 
-            if genre_input == 'exit':
-                sys.exit()
-
-            if genre_input not in ['exit', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10']:
-                print('Please enter a valid input (integer between 1 and 10 or exit) and try again.')
-                print("")
-
-            else:
-                break
-
-        plot2_name = plot_names[int(genre_input)-1]
-        print(f"The genre you selected was {plot2_name}.")
+def step_three():
+    global tracks_filtered
+    global plot2_name
+    print('-'*125)
+    print('Step 3: Looking into a Specific Genre')
+    print('-'*125)
+    while True:
+        print(f"""Now you can look into a specific genre. To see top tracks for your desigred genre, type a selection from 1-10 corresponding to the graph 
+in your browser and the genre you want to see. Alternatively, type back to go back or exit to exit.""")
+        genre_input = input('Your choice: ')
         print("")
-        if weekly_or_all.lower() == 'yes':
-            tracks_filtered = make_genre_top_tracks_all(plot2_name)
-        if weekly_or_all.lower() == 'no':
-            tracks_filtered = make_genre_top_tracks_week(plot2_name)
 
+        if genre_input == 'exit':
+            sys.exit()
 
-        while True:
-            print("Now you can look into the artists of these songs (to see the artist, hover over any bar).") 
-            print("")
-            print("Type 1 if you'd like to see artist information as a radar chart, or type exit to exit.")
-            graph_type = input('Your choice: ')
+        if genre_input not in ['exit', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'back']:
+            print('Please enter a valid input (integer between 1 and 10 or exit) and try again.')
             print("")
 
-            if graph_type == 'exit':
-                sys.exit()
+        if genre_input == 'back':
+            step_two()
 
-            if graph_type not in ['1', 'exit']:
-                print('Please enter a valid input (1 or exit) and try again.')
-                print("")
-            else:
-                break
+        else:
+            plot2_name = plot_names[int(genre_input)-1]
+            print(f"The genre you selected was {plot2_name}.")
+            print("")
+            if weekly_or_all.lower() == '1':
+                tracks_filtered = make_genre_top_tracks_all(plot2_name)
+            if weekly_or_all.lower() == '0':
+                tracks_filtered = make_genre_top_tracks_week(plot2_name)
+            step_four()
 
+def step_four():
+    print('-'*125)
+    print('Step 4: Artist Info for Selected Genre')
+    print('-'*125)
+    while True:
+        print("Now you can look into the artists of these songs (to see the artist, hover over any bar).") 
+        print("")
+        print(f"""Type 1 if you'd like to see artist information as a radar chart. Alternatively, type back 
+to go back or exit to exit.""")
+        graph_type = input('Your choice: ')
+        print("")
+
+        if graph_type == 'exit':
+            sys.exit()
+        if graph_type not in ['1', 'exit']:
+            print('Please enter a valid input (1 or exit) and try again.')
+            print("")
+        if graph_type == 'back':
+            step_three()
         if graph_type == '1':
             graph_title = f'Radar Plot for {plot2_name} Artists'
             make_top_3_radar(tracks_filtered, graph_title)
+            print('Thanks for using the Soundcloud scraper. Please consider contributing to the code on GitHub!')
+            print("")
+            sys.exit()
 
-        print('Thanks for using the Soundcloud scraper. Please consider contributing to the code on GitHub!')
-        print("")
-        sys.exit()
 
-    else:
-        print('Please enter a valid input and try again.')
-        print("")
+def main():
+    intro()
+    step_one()
+    step_two()
+    step_three()
+    step_four()
 
+main()
 
 
