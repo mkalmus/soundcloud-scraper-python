@@ -2,6 +2,13 @@
 
 # READ THIS: Instructions for Running
 
+## Dependencies
+1. plotly: `pip install plotly`
+2. pandas: `pip install pandas`
+3. selenium: `pip install selenium`
+4. beautifulsoup4: `pip install beautifulsoup4`
+5. numpy: `pip install numpy`
+
 ## Running App with Current Data in the Github Repo (you're not caching or scraping the data yourself)
 1. Ensure library dependencies are installed: `plotly` and `pandas` by typing `pip install plotly` and `pip install pandas` if you have pip. Otherwise, please read documentation for package installation.
 3. Open terminal and Google Chrome and navigate to the `main-app-files` directory
