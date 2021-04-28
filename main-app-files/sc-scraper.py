@@ -221,7 +221,6 @@ to go back or exit to exit.""")
             print("")
             sys.exit()
 
-
 def main():
     intro()
     step_one()
