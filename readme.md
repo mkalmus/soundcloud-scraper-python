@@ -26,9 +26,10 @@ This application allows users to work with scraped Soundcloud data and create pl
 1. Install libraries listed in step 1 above (`plotly` and `pandas`)
 2. Ensure library dependencies are installed: `selenium`, `beautifulsoup4`, `numpy`. You can use pip to install as outlined above.
 3. Delete `sc_cache.json` and `soundcloud_data.db` if they exist. 
-4. Run the final-project-scraping-dbstoring.py file by typing `python3 final-project-scraping-dbstoring.py` into your terminal (NOTE: This can take 30+ and creates a new `.db` file and a large `.json` file) 
-5. Run the sc-scraper.py file by typing `python3 sc-scraper.py` into your terminal
-6. Follow the prompts that appear in your terminal and hover over graphs in your browser to interact with them
+4. Open terminal and Google Chrome and navigate to the `main-app-files` directory
+5. Run the final-project-scraping-dbstoring.py file by typing `python3 final-project-scraping-dbstoring.py` into your terminal (NOTE: This can take 30+ and creates a new `.db` file and a large `.json` file) 
+6. Run the sc-scraper.py file by typing `python3 sc-scraper.py` into your terminal
+7. Follow the prompts that appear in your terminal and hover over graphs in your browser to interact with them
 
 # To-do:
 
