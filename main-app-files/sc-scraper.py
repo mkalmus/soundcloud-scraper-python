@@ -240,6 +240,7 @@ def main():
     step_three()
     step_four()
 
-main()
+if __name__ == "__main__":
+    main()
 
 
