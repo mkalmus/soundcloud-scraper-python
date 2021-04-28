@@ -4,8 +4,9 @@
 
 ## Running App with Current Data in the Github Repo (you're not caching or scraping the data yourself)
 1. Ensure library dependencies are installed: `plotly` and `pandas` by typing `pip install plotly` and `pip install pandas` if you have pip. Otherwise, please read documentation for package installation.
-3. Open terminal and Google Chrome and navigate to the main-app-files directory
+3. Open terminal and Google Chrome and navigate to the `main-app-files` directory
 4. Run the sc-scraper.py file by typing `python3 sc-scraper.py` into your terminal
+5. Follow the prompts that appear in your terminal and hover over graphs in your browser to interact with them
 
 ## Fetching New Data, Updating Database and Running App 
 ## WARNING: Running this can take over 30 minutes (optimization in to-do) and creates new files
@@ -14,6 +15,7 @@
 3. Delete `sc_cache.json` and `soundcloud_data.db` if they exist. 
 4. Run the final-project-scraping-dbstoring.py file by typing `python3 final-project-scraping-dbstoring.py` into your terminal (NOTE: This can take 30+ and creates a new `.db` file and a large `.json` file) 
 5. Run the sc-scraper.py file by typing `python3 sc-scraper.py` into your terminal
+6. Follow the prompts that appear in your terminal and hover over graphs in your browser to interact with them
 
 # To-do:
 
