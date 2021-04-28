@@ -27,12 +27,25 @@ genres_values_week = genre_group_weekly['weekly_views']
 genres_names_all = genre_group_all.index.values
 genres_values_all = genre_group_all['all_views']
 
-def make_genre_top_tracks(genre_selection):
+def make_genre_top_tracks_week(genre_selection):
     tracks_filtered = track_df[track_df['genre'] == genre_selection].sort_values(
         'weekly_views', ascending=False).head(3)
 
     graph_title = f'Top 3 Tracks for {genre_selection} (hover to see artist)'
     fig = px.bar(tracks_filtered, x="title", y="weekly_views", log_x=False,
+                     hover_name="artist", hover_data=["title", "artist", "weekly_views"],
+                     title=graph_title)
+
+    fig.show()
+
+    return tracks_filtered
+
+def make_genre_top_tracks_all(genre_selection):
+    tracks_filtered = track_df[track_df['genre'] == genre_selection].sort_values(
+        'weekly_views', ascending=False).head(3)
+
+    graph_title = f'Top 3 Tracks for {genre_selection} (hover to see artist)'
+    fig = px.bar(tracks_filtered, x="title", y="all_views", log_x=False,
                      hover_name="artist", hover_data=["title", "artist", "weekly_views"],
                      title=graph_title)
 
@@ -143,7 +156,10 @@ while True:
         plot2_name = plot_names[int(genre_input)-1]
         print(f"The genre you selected was {plot2_name}.")
         print("")
-        tracks_filtered = make_genre_top_tracks(plot2_name)
+        if weekly_or_all.lower() == 'yes':
+            tracks_filtered = make_genre_top_tracks_all(plot2_name)
+        if weekly_or_all.lower() == 'no':
+            tracks_filtered = make_genre_top_tracks_week(plot2_name)
 
 
         while True:
@@ -167,6 +183,7 @@ while True:
             make_top_3_radar(tracks_filtered, graph_title)
 
         print('Thanks for using the Soundcloud scraper. Please consider contributing to the code on GitHub!')
+        print("")
         sys.exit()
 
     else:
