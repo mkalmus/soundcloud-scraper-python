@@ -1,3 +1,6 @@
+.ipynb_checkpoints
+.DS_Store
+scraper_env
 cache_half1.json
 cache_half2.json
 sc_cache.json
