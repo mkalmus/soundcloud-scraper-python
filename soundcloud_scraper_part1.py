@@ -1,13 +1,6 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 import requests
 import json
 from bs4 import BeautifulSoup
-import time
-import sys
-import pandas as pd
-import numpy as np
-from datetime import datetime
 import re
 
 def open_cache():
@@ -66,8 +59,11 @@ def get_top_track_links(html):
     links = soup.find('div', {'class': 'chartTracks'}).find_all('a', href=re.compile('^/[^/]*$'))
     return list(set(links))
 
-if __name__ == "__main__":
-    BASE_URL = 'https://soundcloud.com'
-    CACHE_FILENAME = 'cache.json'
-    SCROLL_PAUSE_TIME = 1
-    CHROMEDRIVER_PATH = './chromedriver'
+BASE_URL = 'https://soundcloud.com/charts'
+CACHE_FILENAME = 'cache.json'
+
+html = request_with_cache(url)
+soup = BeautifulSoup(html, "html.parser")
+final_list = []
+# Links to all genres (e.g. alternativerock, dancehall)
+category_links = soup.find_all('a', href=re.compile("^(/charts/top)((?!all-).)*$"))
