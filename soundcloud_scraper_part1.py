@@ -39,6 +39,7 @@ def save_cache(cache_dict):
     fw = open(CACHE_FILENAME,"w")
     fw.write(dumped_json_cache)
     fw.close()
+    return None
 
 def request_with_cache(url):
     cache_dict = open_cache()
