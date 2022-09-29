@@ -70,9 +70,5 @@ all_links = soup.find_all('a')
 #print(all_links)
 
 # Links to all genres (e.g. alternativerock, dancehall)
-category_links = soup.find_all('a', href=re.compile("^(/charts/top)"))
+category_links = soup.find_all('a', href=re.compile("^(/charts/top)((?!all-).)*$"))
 print(category_links)
-
-# Links to all genres (e.g. alternativerock, dancehall)
-# category_links = soup.find_all('a', href=re.compile("^(/charts/top)((?!all-).)*$"))
-# print(category_links)
