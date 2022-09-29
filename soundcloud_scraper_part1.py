@@ -41,7 +41,7 @@ def save_cache(cache_dict):
     fw.close()
 
 def request_with_cache(url):
-    cache_dict = open_cache(CACHE_FILENAME)
+    cache_dict = open_cache()
     if url in cache_dict.keys():
         print('Fetching from cache...')
         return cache_dict[url]
@@ -62,8 +62,17 @@ def get_top_track_links(html):
 BASE_URL = 'https://soundcloud.com/charts'
 CACHE_FILENAME = 'cache.json'
 
-html = request_with_cache(url)
+html = request_with_cache(BASE_URL)
 soup = BeautifulSoup(html, "html.parser")
-final_list = []
+
+# Find all links
+all_links = soup.find_all('a')
+#print(all_links)
+
 # Links to all genres (e.g. alternativerock, dancehall)
-category_links = soup.find_all('a', href=re.compile("^(/charts/top)((?!all-).)*$"))
+category_links = soup.find_all('a', href=re.compile("^(/charts/top)"))
+print(category_links)
+
+# Links to all genres (e.g. alternativerock, dancehall)
+# category_links = soup.find_all('a', href=re.compile("^(/charts/top)((?!all-).)*$"))
+# print(category_links)
