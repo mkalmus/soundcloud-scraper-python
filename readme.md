@@ -6,7 +6,7 @@ A repository to showcase different uses of Selenium, BeautifulSoup, and Requests
 # Instructions
 
 ## Install Dependencies
-`pip install requirements.txt`
+`pip install -r requirements.txt`
 
 ## Running
 `python [filename].py` (Differs for Parts 1-4)
