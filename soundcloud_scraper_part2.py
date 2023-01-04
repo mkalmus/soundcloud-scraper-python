@@ -117,9 +117,44 @@ def get_source_scrollable(url):
         save_cache(CACHE_DICT)
         return html
 
+def get_top_track_links(html):
+    """
+    Inputs:
+        html (str) : html for the top charts of a given genre on Soundcloud (i.e. html for https://soundcloud.com/charts/top?genre=reggaeton)
+    Outputs:
+        links (list) : unique track links
+    """
+    soup = BeautifulSoup(html, "html.parser")
+    # Links to top artists in genres
+    links = soup.find('div', {'class': 'chartTracks'}).find_all('a', href=re.compile('^/[^/]*$'))
+    return list(set(links))
+
+def get_artist_stats(link):
+    full_path = f"https://soundcloud.com{link['href']}"
+    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'}
+    r = requests.get(full_path, headers=headers)
+    soup = BeautifulSoup(r.text, "html.parser")
+    try:
+        x = soup.find_all('script')[9].string.split('= ')[1].strip('][').split('{')[-4].split(',')
+        stat_dict = {}
+        for val in x[6:30]:
+            kps = val.split(':')
+            stat_dict[kps[0].strip('"')] = kps[1].strip('"')
+        print(f"Success for {link['href']}")
+        return stat_dict
+    except:
+        print(f"Issue with {link['href']}")
+
 CHROMEDRIVER_PATH = "./chromedriver"
 SCROLL_PAUSE_TIME = 2
 
-scrollable_page = f"https://soundcloud.com{category_links[0]['href']}"
-print(scrollable_page)
-get_source_scrollable(scrollable_page)
+scrollable_page_link = f"https://soundcloud.com{category_links[0]['href']}"
+scrollable_page_html = get_source_scrollable(scrollable_page_link)
+print(type(scrollable_page_html))
+
+top_tracks = get_top_track_links(scrollable_page_html)
+# print(top_tracks[0])
+
+artist_stats = get_artist_stats(top_tracks[0])
+# print(artist_stats)
