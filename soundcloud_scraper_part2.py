@@ -125,7 +125,7 @@ def get_top_track_links(html):
         links (list) : unique track links
     """
     soup = BeautifulSoup(html, "html.parser")
-    # Links to top artists in genres
+    # Links to top tracks in genre
     links = soup.find('div', {'class': 'chartTracks'}).find_all('a', href=re.compile('^/[^/]*$'))
     return list(set(links))
 
@@ -151,7 +151,7 @@ SCROLL_PAUSE_TIME = 2
 
 scrollable_page_link = f"https://soundcloud.com{category_links[0]['href']}"
 scrollable_page_html = get_source_scrollable(scrollable_page_link)
-print(type(scrollable_page_html))
+# print(type(scrollable_page_html))
 
 top_tracks = get_top_track_links(scrollable_page_html)
 # print(top_tracks[0])
