@@ -5,8 +5,12 @@ import re
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import time
 
+# PART 1 FUNCTIONS
 def open_cache():
     '''
     - Opens the cache based on CACHE_FILENAME and returns cache as dictionary
@@ -64,6 +68,7 @@ def get_top_track_links(html):
     links = soup.find('div', {'class': 'chartTracks'}).find_all('a', href=re.compile('^/[^/]*$'))
     return list(set(links))
 
+# PART 2 FUNCTIONS
 def get_source_scrollable(url):
     """
     Gets the page source for a site that requires multiple scrolls but has a finite end
@@ -127,34 +132,79 @@ def get_artist_stats(link):
         for val in x[6:30]:
             kps = val.split(':')
             stat_dict[kps[0].strip('"')] = kps[1].strip('"')
+        if stat_dict == {}:
+            print(f"Issue with {link['href']}")
+            return
         print(f"Success for {link['href']}")
         return stat_dict
     except:
         print(f"Issue with {link['href']}")
 
+def get_artist_stats_main(url):
+    """
+    Gets the page source for a site that requires multiple scrolls but has a finite end
+    """
+    CACHE_DICT = open_cache()
+    if url in CACHE_DICT.keys():
+        print('Fetching from cache...')
+        return CACHE_DICT[url]
+    else:
+        print('Making new headless browser')
+        # Setup headless chromedriver
+        chrome_options = Options()
+        chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--enable-javascript")
+        # In Selenium 4, using ChromeService gets rid of deprecation warning when directly passing path
+        service = ChromeService(executable_path=CHROMEDRIVER_PATH)
+        driver = webdriver.Chrome(service=service, options=chrome_options)
+        driver.get(url)
+        # We need to wait until the relevant information shows up after it's been populated by JavaScript
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located(
+                (
+                    By.CLASS_NAME,
+                    "infoStats",
+                )
+            )
+        )
+        # Get scroll height
+        html = driver.page_source
+        CACHE_DICT[url] = html
+        driver.close()
+        save_cache(CACHE_DICT)
+        return html
 
 BASE_URL = 'https://soundcloud.com/charts'
 CACHE_FILENAME = 'cache.json'
 
 html = request_with_cache(BASE_URL)
 soup = BeautifulSoup(html, "html.parser")
+# Links to all genres (e.g. alternativerock, dancehall)
+# Example: <a href="/charts/top?genre=alternativerock">Alternative Rock</a>
+category_links = soup.find_all('a', href=re.compile("^(/charts/top)((?!all-).)*$"))
+print(f"Category Link: {category_links[0]}")
 
 # BEGIN PART 2
 
 CHROMEDRIVER_PATH = "./chromedriver"
 SCROLL_PAUSE_TIME = 2
 
-# Links to all genres (e.g. alternativerock, dancehall)
-# Example: <a href="/charts/top?genre=alternativerock">Alternative Rock</a>
-category_links = soup.find_all('a', href=re.compile("^(/charts/top)((?!all-).)*$"))
-print(f"Category Link: {category_links[0]}")
-
 # Get HTML source of category link like https://soundcloud.com/charts/top?genre=alternativerock
-scrollable_page_link = f"https://soundcloud.com{category_links[0]['href']}"
-scrollable_page_html = get_source_scrollable(scrollable_page_link)
-
-# BEGIN PART 3
+scrollable_page_html = get_source_scrollable(f"https://soundcloud.com{category_links[0]['href']}")
 
 # Given HTML of a category page, get links to artists
 artist_links = get_top_track_links(scrollable_page_html)
-print(f"Category Link: {artist_links[0]}")
+print(f"Artist Link: {artist_links[40]}")
+
+# BEGIN PART 3
+
+# artist_stats = get_artist_stats(artist_links[40])
+# print(artist_stats)
+
+artist_html = get_artist_stats_main(f"https://soundcloud.com{artist_links[40]['href']}")
+soup = BeautifulSoup(artist_html, "html.parser")
+# Links to top artists in genres
+stat_titles = soup.find('article', {'class': 'infoStats'}).find_all('h3', {'class': 'infoStats__title'})
+stat_divs = soup.find('article', {'class': 'infoStats'}).find_all('div', {'class': 'infoStats__value'})
+print([x.text for x in stat_titles])
+print([x.text for x in stat_divs])

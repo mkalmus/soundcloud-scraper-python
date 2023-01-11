@@ -7,6 +7,7 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options
 import time
 
+# PART 1 FUNCTIONS
 def open_cache():
     '''
     - Opens the cache based on CACHE_FILENAME and returns cache as dictionary
@@ -64,6 +65,7 @@ def get_top_track_links(html):
     links = soup.find('div', {'class': 'chartTracks'}).find_all('a', href=re.compile('^/[^/]*$'))
     return list(set(links))
 
+# PART 2 FUNCTIONS
 def get_source_scrollable(url):
     """
     Gets the page source for a site that requires multiple scrolls but has a finite end
@@ -115,44 +117,24 @@ def get_top_track_links(html):
     links = soup.find('div', {'class': 'chartTracks'}).find_all('a', href=re.compile('^/[^/]*$'))
     return links
 
-def get_artist_stats(link):
-    full_path = f"https://soundcloud.com{link['href']}"
-    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36',
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'}
-    r = requests.get(full_path, headers=headers)
-    soup = BeautifulSoup(r.text, "html.parser")
-    try:
-        x = soup.find_all('script')[9].string.split('= ')[1].strip('][').split('{')[-4].split(',')
-        stat_dict = {}
-        for val in x[6:30]:
-            kps = val.split(':')
-            stat_dict[kps[0].strip('"')] = kps[1].strip('"')
-        print(f"Success for {link['href']}")
-        return stat_dict
-    except:
-        print(f"Issue with {link['href']}")
-
-
 BASE_URL = 'https://soundcloud.com/charts'
 CACHE_FILENAME = 'cache.json'
 
 html = request_with_cache(BASE_URL)
 soup = BeautifulSoup(html, "html.parser")
+# Links to all genres (e.g. alternativerock, dancehall)
+# Example: <a href="/charts/top?genre=alternativerock">Alternative Rock</a>
+category_links = soup.find_all('a', href=re.compile("^(/charts/top)((?!all-).)*$"))
+print(f"Category Link: {category_links[0]}")
 
 # BEGIN PART 2
 
 CHROMEDRIVER_PATH = "./chromedriver"
 SCROLL_PAUSE_TIME = 2
 
-# Links to all genres (e.g. alternativerock, dancehall)
-# Example: <a href="/charts/top?genre=alternativerock">Alternative Rock</a>
-category_links = soup.find_all('a', href=re.compile("^(/charts/top)((?!all-).)*$"))
-print(f"Category Link: {category_links[0]}")
-
 # Get HTML source of category link like https://soundcloud.com/charts/top?genre=alternativerock
-scrollable_page_link = f"https://soundcloud.com{category_links[0]['href']}"
-scrollable_page_html = get_source_scrollable(scrollable_page_link)
+scrollable_page_html = get_source_scrollable(f"https://soundcloud.com{category_links[0]['href']}")
 
 # Given HTML of a category page, get links to artists
 artist_links = get_top_track_links(scrollable_page_html)
-print(f"Category Link: {artist_links[0]}")
+print(f"Artist Link: {artist_links[0]}")
