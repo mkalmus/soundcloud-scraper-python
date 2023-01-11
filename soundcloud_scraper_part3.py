@@ -153,6 +153,8 @@ print(f"Category Link: {category_links[0]}")
 scrollable_page_link = f"https://soundcloud.com{category_links[0]['href']}"
 scrollable_page_html = get_source_scrollable(scrollable_page_link)
 
+# BEGIN PART 3
+
 # Given HTML of a category page, get links to artists
 artist_links = get_top_track_links(scrollable_page_html)
 print(f"Category Link: {artist_links[0]}")
